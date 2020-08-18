@@ -1,6 +1,8 @@
-# ckb-anyone-can-pay
+# ckb-anyone-can-pay-to-multisig
 
-CKB anyone-can-pay lock.
+CKB anyone-can-pay multisig lock, forked from the [official anyone-can-pay repo](https://github.com/nervosnetwork/ckb-anyone-can-pay).
+
+warn: this is an experimental work.
 
 [RFC Draft](https://talk.nervos.org/t/rfc-anyone-can-pay-lock/4438)
 
@@ -20,11 +22,13 @@ make all-via-docker && cargo test
 Cell {
     lock: {
         code_hash: <any-one-can-pay>
-        args: <pubkey hash>
+        args: <secp256k1 multisig args>
     }
     data: <UDT amount>
     type: <UDT>
 }
+
+secp256k1 multisig args: S | R | M | N | PubKeyHash1 | PubKeyHash2 | ...
 ```
 
 2, create a cell to receive only CKB:
@@ -33,7 +37,7 @@ Cell {
 Cell {
     lock: {
         code_hash: <any-one-can-pay>
-        args: <pubkey hash>
+        args: <secp256k1 multisig args>
     }
     data: <empty>
     type: <none>
@@ -46,7 +50,7 @@ Cell {
 Cell {
     lock: {
         code_hash: <any-one-can-pay>
-        args: <pubkey hash> | <minimum CKB> | <minimum UDT>
+        args: <secp256k1 multisig args> | <minimum CKB> | <minimum UDT>
     }
     data: <UDT amount>
     type: <UDT>
@@ -66,7 +70,7 @@ To transfer coins to an anyone-can-pay lock cell, the sender must build an outpu
 Cell {
     lock: {
         code_hash: <any-one-can-pay>
-        args: <pubkey hash> | <minimum CKB: 2>
+        args: <secp256k1 mutisig args> | <minimum CKB: 2>
     }
     data: <empty>
     type: <none>
@@ -78,7 +82,7 @@ Cell {
 Cell {
     lock: {
         code_hash: <any-one-can-pay>
-        args: <pubkey hash> | <minimum CKB: 2>
+        args: <secp256k1 mutisig args> | <minimum CKB: 2>
     }
     data: <empty>
     type: <none>
@@ -89,6 +93,6 @@ Cell {
 
 ### Signature
 
-The owner can provide a secp256k1 signature to unlock the cell, the signature method is the same as the [P2PH](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#p2ph).
+The owner can provide a M-of-N threshold secp256k1 signature to unlock the cell, the signature method is the same as the [Multisig](https://github.com/nervosnetwork/ckb-system-scripts/wiki/How-to-sign-transaction#multisig).
 
 Unlock a cell with a signature has no restrictions, which helps owner to manage the cell as he wants.
